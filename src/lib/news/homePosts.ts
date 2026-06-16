@@ -1,3 +1,4 @@
+import { cache } from "react";
 import {
   getHomepageSectionMeta,
   HOMEPAGE_SECTIONS,
@@ -124,6 +125,27 @@ export async function getHomepageNewsSections(): Promise<HomepageNewsSections> {
       special: sections.latest.slice(0, 3),
     };
   }
+}
+
+export const getCachedHomepageNewsSections = cache(getHomepageNewsSections);
+
+export async function getHomepageSeoStories(): Promise<{
+  topStory: HomepageNewsSections["topStories"][number] | null;
+  headlineItems: HomepageNewsSections["topStories"];
+}> {
+  const sections = await getCachedHomepageNewsSections();
+  const headlineItems = [
+    ...sections.topStories,
+    ...sections.latest,
+  ].filter(
+    (item, index, items) =>
+      items.findIndex((candidate) => candidate.id === item.id) === index,
+  );
+
+  return {
+    topStory: sections.topStories[0] ?? sections.latest[0] ?? null,
+    headlineItems: headlineItems.slice(0, 10),
+  };
 }
 
 export { getHomepageSectionMeta, HOMEPAGE_SECTIONS };

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
+  HOME_PAGE_TITLE,
   SITE_NAME,
   getSiteUrl,
 } from "@/lib/seo/site";
@@ -87,7 +88,7 @@ export function buildRootMetadata(): Metadata {
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: `${SITE_NAME} | പ്രധാന വാർത്തകൾ`,
+      default: HOME_PAGE_TITLE,
       template: `%s | ${SITE_NAME}`,
     },
     description: DEFAULT_DESCRIPTION,
@@ -95,13 +96,13 @@ export function buildRootMetadata(): Metadata {
       type: "website",
       locale: "ml_IN",
       siteName: SITE_NAME,
-      title: `${SITE_NAME} | പ്രധാന വാർത്തകൾ`,
+      title: HOME_PAGE_TITLE,
       description: DEFAULT_DESCRIPTION,
       images: [{ url: imageUrl, alt: SITE_NAME }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${SITE_NAME} | പ്രധാന വാർത്തകൾ`,
+      title: HOME_PAGE_TITLE,
       description: DEFAULT_DESCRIPTION,
       images: [imageUrl],
     },

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { AdvertisementSlot } from "@/components/landing/AdvertisementSlot";
 import { HomeTopStoryCard } from "@/components/landing/HomeTopStoryCard";
@@ -11,31 +12,38 @@ import {
   YouTubeChannelLink,
   YouTubePlayer,
 } from "@/components/landing/YouTubePlayer";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { getActiveAdByPlacement } from "@/lib/db/advertisements";
-import { getHomepageNewsSections, getHomepageTopicSections } from "@/lib/news/homePosts";
+import {
+  getCachedHomepageNewsSections,
+  getHomepageSeoStories,
+  getHomepageTopicSections,
+} from "@/lib/news/homePosts";
 import {
   getPublicCategories,
   getPublicNavLinks,
 } from "@/lib/navigation/publicNav";
-import { buildPageMetadata } from "@/lib/seo/metadata";
-import { buildOrganizationJsonLd } from "@/lib/seo/jsonLd";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_NAME } from "@/lib/seo/site";
+import { buildHomepageJsonLd } from "@/lib/seo/jsonLd";
+import {
+  buildHomepageHeading,
+  buildHomepageMetadata,
+} from "@/lib/seo/homepageMetadata";
 import { getPublicHomepageVideos } from "@/lib/videos/publicVideos";
 import { getHomepageHeroVideoEmbedUrl } from "@/lib/youtube/homepageVideo";
 
-export const metadata = buildPageMetadata({
-  title: "പ്രധാന വാർത്തകൾ",
-  path: "/",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { topStory } = await getHomepageSeoStories();
+  return buildHomepageMetadata(topStory);
+}
 
 export default async function LandingPage() {
-  const newsSections = await getHomepageNewsSections();
+  const newsSections = await getCachedHomepageNewsSections();
   const topStories = newsSections.topStories;
   const latest = newsSections.latest;
   const trending = newsSections.trending;
   const mustRead = newsSections.mustRead;
   const special = newsSections.special;
+  const { headlineItems } = await getHomepageSeoStories();
   const navLinks = await getPublicNavLinks();
   const dbCategories = await getPublicCategories();
   const [homeSidebarAd, homeMidBannerAd, homepageVideos, topicSections, homepageVideoEmbedUrl] =
@@ -49,11 +57,11 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-zinc-950">
-      <JsonLd data={buildOrganizationJsonLd()} />
+      <JsonLd data={buildHomepageJsonLd(headlineItems)} />
       <SiteHeader activeHref="/" navLinks={navLinks} />
 
       <main className="mx-auto w-full max-w-7xl px-4 py-6">
-        <h1 className="sr-only">{SITE_NAME} — പ്രധാന വാർത്തകൾ</h1>
+        <h1 className="sr-only">{buildHomepageHeading()}</h1>
         <div className="grid gap-8 lg:grid-cols-12">
           <section className="lg:col-span-8">
             <div>
