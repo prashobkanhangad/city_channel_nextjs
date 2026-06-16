@@ -5,7 +5,7 @@ export function LiveTvHeaderLink() {
     <Link
       href="/live-tv"
       prefetch={false}
-      className="grid min-w-[170px] place-items-center bg-red-700 px-6 text-lg font-semibold tracking-wide text-white hover:bg-red-800"
+      className="flex min-h-11 shrink-0 items-center justify-center self-stretch bg-red-700 px-3 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-red-800 sm:min-w-[132px] sm:px-5 sm:text-sm md:min-w-[170px] md:px-6 md:text-lg"
     >
       LIVE TV
     </Link>

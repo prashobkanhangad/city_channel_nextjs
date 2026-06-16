@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { LiveTvHeaderLink } from "@/components/landing/LiveTvHeaderLink";
-import { SiteLogo } from "@/components/landing/SiteLogo";
+import { SiteHeaderClient } from "@/components/landing/SiteHeaderClient";
 import { contactNavLink } from "@/lib/mock/newsData";
 import type { PublicNavLink } from "@/lib/navigation/publicNav";
 
@@ -9,61 +7,73 @@ type SiteHeaderProps = {
   navLinks: PublicNavLink[];
 };
 
-export function SiteHeader({ activeHref = "/", navLinks }: SiteHeaderProps) {
+function useHeaderDateParts() {
   const now = new Date();
-  const dayNumber = now.toLocaleDateString("en-GB", { day: "2-digit" });
-  const monthYear = now
-    .toLocaleDateString("en-GB", { month: "short", year: "numeric" })
-    .toUpperCase();
-  const weekDay = now.toLocaleDateString("en-GB", { weekday: "long" }).toUpperCase();
+
+  return {
+    dayNumber: now.toLocaleDateString("en-GB", { day: "2-digit" }),
+    monthYear: now
+      .toLocaleDateString("en-GB", { month: "short", year: "numeric" })
+      .toUpperCase(),
+    weekDay: now
+      .toLocaleDateString("en-GB", { weekday: "long" })
+      .toUpperCase(),
+  };
+}
+
+function HeaderDateMobile() {
+  const { dayNumber, monthYear, weekDay } = useHeaderDateParts();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white shadow-sm">
-      <div className="mx-auto flex w-full max-w-7xl items-stretch justify-between">
-        <div className="flex min-w-0 items-center gap-3 px-3 py-2">
-          <SiteLogo priority width={170} height={52} />
+    <div className="min-w-0 leading-tight">
+      <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-zinc-900">
+        {dayNumber} {monthYear}
+      </p>
+      <p className="truncate text-[10px] font-medium uppercase tracking-wide text-zinc-600">
+        {weekDay}
+      </p>
+    </div>
+  );
+}
 
-          <div className="flex items-center gap-2 text-zinc-900">
-            <span className="text-5xl font-semibold leading-none">{dayNumber}</span>
-            <div className="pt-1 leading-tight">
-              <p className="text-lg font-semibold">{monthYear}</p>
-              <p className="text-sm font-medium text-zinc-700">{weekDay}</p>
-            </div>
+function HeaderDateInline() {
+  const { dayNumber, monthYear, weekDay } = useHeaderDateParts();
+
+  return (
+    <>
+      <div className="hidden shrink-0 md:block lg:hidden">
+        <div className="flex items-center gap-2 whitespace-nowrap border-l border-zinc-200 pl-3">
+          <span className="text-2xl font-semibold leading-none text-zinc-900">
+            {dayNumber}
+          </span>
+          <div className="leading-tight">
+            <p className="text-[11px] font-semibold tracking-wide">{monthYear}</p>
+            <p className="text-[10px] font-medium text-zinc-600">{weekDay}</p>
           </div>
-        </div>
-
-        <div className="flex items-stretch">
-          <LiveTvHeaderLink />
         </div>
       </div>
 
-      <nav className="border-t border-zinc-200 bg-[#e8ebf3]">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
-          <div className="flex flex-wrap items-center gap-8 py-3 font-medium tracking-wide text-zinc-900">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`text-sm hover:text-red-700 ${
-                  activeHref === item.href ? "font-bold text-red-700" : ""
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-          <Link
-            href={contactNavLink.href}
-            className={`text-sm font-medium hover:text-red-700 ${
-              activeHref === contactNavLink.href
-                ? "font-bold text-red-700"
-                : "text-zinc-900"
-            }`}
-          >
-            {contactNavLink.label}
-          </Link>
+      <div className="hidden shrink-0 items-center gap-2 lg:flex">
+        <span className="text-5xl font-semibold leading-none text-zinc-900">
+          {dayNumber}
+        </span>
+        <div className="leading-tight">
+          <p className="text-lg font-semibold text-zinc-900">{monthYear}</p>
+          <p className="text-sm font-medium text-zinc-700">{weekDay}</p>
         </div>
-      </nav>
-    </header>
+      </div>
+    </>
+  );
+}
+
+export function SiteHeader({ activeHref = "/", navLinks }: SiteHeaderProps) {
+  return (
+    <SiteHeaderClient
+      activeHref={activeHref}
+      navLinks={navLinks}
+      contactLink={contactNavLink}
+      dateSlot={<HeaderDateInline />}
+      mobileDateSlot={<HeaderDateMobile />}
+    />
   );
 }
