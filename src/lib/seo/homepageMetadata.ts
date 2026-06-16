@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { NewsItem } from "@/lib/mock/newsData";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
+  DEFAULT_OG_IMAGE,
   HOME_PAGE_DESCRIPTION,
   HOME_PAGE_KEYWORDS,
   HOME_PAGE_TITLE,
@@ -29,7 +30,7 @@ export function buildHomepageMetadata(topStory?: NewsItem | null): Metadata {
     title: HOME_PAGE_TITLE,
     description,
     path: "/",
-    image: topStory?.imageUrl,
+    image: DEFAULT_OG_IMAGE,
   });
 
   return {
