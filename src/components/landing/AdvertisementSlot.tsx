@@ -4,9 +4,11 @@ import type { Advertisement } from "@/types/advertisement";
 type AdvertisementSlotProps = {
   ad: Advertisement | null | undefined;
   fallbackAspectClass?: string;
+  aspectClassName?: string;
   label?: string;
   className?: string;
   compact?: boolean;
+  showHeader?: boolean;
 };
 
 function isExternalUrl(url: string) {
@@ -16,12 +18,16 @@ function isExternalUrl(url: string) {
 export function AdvertisementSlot({
   ad,
   fallbackAspectClass = "aspect-[16/10]",
+  aspectClassName,
   label = "Advertisement",
   className = "",
   compact = false,
+  showHeader = true,
 }: AdvertisementSlotProps) {
   const aspectClass =
-    ad?.aspectClass ?? (compact ? "aspect-[16/2]" : fallbackAspectClass);
+    aspectClassName ??
+    ad?.aspectClass ??
+    (compact ? "aspect-[16/2]" : fallbackAspectClass);
 
   if (!ad) {
     return (
@@ -62,7 +68,7 @@ export function AdvertisementSlot({
 
   return (
     <div className={className}>
-      {!compact ? (
+      {!compact && showHeader ? (
         <div className="mb-2 flex items-center justify-between">
           <h4 className="text-sm font-bold text-zinc-900">{ad.title}</h4>
           <span className="text-xs text-zinc-500">Ad</span>

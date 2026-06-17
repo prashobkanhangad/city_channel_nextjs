@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { AdvertisementSlot } from "@/components/landing/AdvertisementSlot";
 import { getActiveAdByPlacement } from "@/lib/db/advertisements";
+import { getPublishedPosts } from "@/lib/db/posts";
 import type { NewsItem } from "@/lib/mock/newsData";
+import { postToNewsItem } from "@/lib/news/postNewsItem";
 import { formatRelativeTime } from "@/lib/utils/time";
 
-export async function CategorySidebar({ latest }: { latest: NewsItem[] }) {
-  const [topAd, bottomAd] = await Promise.all([
+export async function CategorySidebar({ latest = [] }: { latest?: NewsItem[] }) {
+  const [topAd, bottomAd, latestPosts] = await Promise.all([
     getActiveAdByPlacement("category-sidebar-top").catch(() => null),
     getActiveAdByPlacement("category-sidebar-bottom").catch(() => null),
+    getPublishedPosts(8).catch(() => []),
   ]);
+  const latestItems =
+    latestPosts.length > 0 ? latestPosts.map(postToNewsItem) : latest.slice(0, 8);
 
   return (
     <aside className="space-y-6">
@@ -16,6 +21,7 @@ export async function CategorySidebar({ latest }: { latest: NewsItem[] }) {
         ad={topAd}
         fallbackAspectClass="aspect-[4/3]"
         className="mb-2"
+        showHeader={false}
       />
 
       <section>
@@ -23,7 +29,7 @@ export async function CategorySidebar({ latest }: { latest: NewsItem[] }) {
           Latest
         </h3>
         <div className="mt-2 divide-y divide-zinc-100">
-          {latest.slice(0, 8).map((item) => (
+          {latestItems.map((item) => (
             <Link
               key={item.id}
               href={`/news/${item.id}`}

@@ -15,7 +15,6 @@ export function HomeTopStoryCard({ item, priority = false }: HomeTopStoryCardPro
         src={item.imageUrl}
         alt={item.title}
         priority={priority}
-        aspectClassName="aspect-[16/10]"
         className="mb-3"
         sizes="(max-width: 1024px) 100vw, 33vw"
       />
@@ -27,10 +26,10 @@ export function HomeTopStoryCard({ item, priority = false }: HomeTopStoryCardPro
           {formatRelativeTime(item.minutesAgo)}
         </span>
       </div>
-      <h2 className="mt-2 line-clamp-2 text-lg font-extrabold leading-7 text-zinc-950 group-hover:text-red-700 sm:text-xl">
+      <h2 className="mt-2 line-clamp-3 text-base font-extrabold leading-6 text-zinc-950 group-hover:text-red-700 md:text-lg md:leading-7">
         {item.title}
       </h2>
-      <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-600">
+      <p className="mt-2 line-clamp-2 text-sm leading-5 text-zinc-600">
         {item.excerpt}
       </p>
     </Link>

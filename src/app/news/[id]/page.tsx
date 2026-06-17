@@ -88,7 +88,6 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
               priority
               src={article.imageUrl}
               alt={article.title}
-              aspectClassName="aspect-[16/9]"
               className="mt-6 rounded-none"
               sizes="(max-width: 1024px) 100vw, 66vw"
             />

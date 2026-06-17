@@ -4,7 +4,6 @@ import { AdvertisementSlot } from "@/components/landing/AdvertisementSlot";
 import { HomeTopStoryCard } from "@/components/landing/HomeTopStoryCard";
 import { HomepageThreeColumnSection } from "@/components/landing/HomepageThreeColumnSection";
 import { NewsThumbItem } from "@/components/landing/NewsThumbItem";
-import { PostFeaturedImage } from "@/components/landing/PostImage";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { VideoGrid } from "@/components/landing/VideoGrid";
@@ -80,8 +79,8 @@ export default async function LandingPage() {
               />
 
               {topStories.length > 0 ? (
-                <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-                  {topStories.slice(0, 2).map((item, index) => (
+                <div className="mt-4 grid grid-cols-1 gap-6 md:grid-cols-3">
+                  {topStories.slice(0, 3).map((item, index) => (
                     <HomeTopStoryCard
                       key={item.id}
                       item={item}
@@ -93,8 +92,8 @@ export default async function LandingPage() {
             </div>
 
             <div className="mt-4 space-y-1">
-              {topStories.slice(2, 7).map((item) => (
-                <NewsThumbItem key={item.id} item={item} />
+              {topStories.slice(3, 8).map((item) => (
+                <NewsThumbItem key={item.id} item={item} imageSize="medium" />
               ))}
             </div>
           </section>
@@ -110,7 +109,7 @@ export default async function LandingPage() {
 
               <div className="mt-3 space-y-1">
                 {latest.slice(0, 6).map((item) => (
-                  <NewsThumbItem key={item.id} item={item} />
+                  <NewsThumbItem key={item.id} item={item} imageSize="large" />
                 ))}
               </div>
             </div>
@@ -119,6 +118,7 @@ export default async function LandingPage() {
               ad={homeSidebarAd}
               fallbackAspectClass="aspect-[16/10]"
               className="mt-8"
+              showHeader={false}
             />
           </aside>
         </div>
@@ -151,14 +151,6 @@ export default async function LandingPage() {
               Special
             </h3>
 
-            <PostFeaturedImage
-              src={special[0]?.imageUrl ?? topStories[0]?.imageUrl ?? latest[0]?.imageUrl}
-              alt={special[0]?.title ?? topStories[0]?.title ?? "Special"}
-              aspectClassName="aspect-[16/7]"
-              className="mb-4"
-              sizes="(max-width: 1024px) 100vw, 33vw"
-            />
-
             <div className="space-y-1">
               {special.slice(0, 3).map((item) => (
                 <NewsThumbItem key={item.id} item={item} />
@@ -171,6 +163,7 @@ export default async function LandingPage() {
           ad={homeMidBannerAd}
           compact
           fallbackAspectClass="aspect-[16/2]"
+          aspectClassName="aspect-[16/5] md:aspect-[16/3]"
           className="mt-10"
         />
 
