@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { NewsItem } from "@/lib/mock/newsData";
-import { PostFeaturedImage, PostThumbImage } from "@/components/landing/PostImage";
+import { PostFeaturedImage, PostThumbImage, POST_IMAGE_ASPECT_CLASS } from "@/components/landing/PostImage";
 import { formatRelativeTime } from "@/lib/utils/time";
 
 export function NewsCard({
@@ -15,7 +15,7 @@ export function NewsCard({
   if (variant === "hero") {
     return (
       <Link href={href} className="group block rounded-lg p-3 hover:bg-zinc-50">
-        <PostFeaturedImage className="mb-3" aspectClassName="aspect-[16/9]" />
+        <PostFeaturedImage className="mb-3" />
         <div className="flex items-center gap-2">
           <span className="rounded-md bg-red-600 px-2 py-0.5 text-[11px] font-semibold text-white">
             {item.section}
@@ -40,7 +40,7 @@ export function NewsCard({
         href={href}
         className="group block rounded-lg p-3 transition hover:bg-zinc-50"
       >
-        <PostThumbImage className="mb-2 h-24 w-full rounded-md" />
+        <PostThumbImage className={`mb-2 w-full rounded-md ${POST_IMAGE_ASPECT_CLASS}`} />
         <div className="flex items-center justify-between gap-3">
           <span className="rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-semibold text-zinc-800">
             {item.section}
