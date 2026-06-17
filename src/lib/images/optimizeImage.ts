@@ -1,3 +1,4 @@
+import sharp from "sharp";
 import { IMAGE_WEBP_QUALITY } from "@/lib/images/constants";
 
 export type OptimizeImageOptions = {
@@ -11,23 +12,11 @@ export type OptimizedImage = {
   extension: "webp";
 };
 
-async function getSharp() {
-  try {
-    const sharpModule = await import("sharp");
-    return sharpModule.default;
-  } catch {
-    throw new Error(
-      "Image processing is unavailable. Run: npm install --include=optional sharp",
-    );
-  }
-}
-
 export async function optimizeImageBuffer(
   input: Buffer,
   options: OptimizeImageOptions = {},
 ): Promise<OptimizedImage> {
   const { maxWidth = 1600, quality = IMAGE_WEBP_QUALITY } = options;
-  const sharp = await getSharp();
 
   const metadata = await sharp(input).metadata();
   let pipeline = sharp(input).rotate();

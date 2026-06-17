@@ -6,6 +6,9 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["sharp"],
+  outputFileTracingIncludes: {
+    "/*": ["./node_modules/sharp/**", "./node_modules/@img/**"],
+  },
   images: {
     remotePatterns: [
       {
