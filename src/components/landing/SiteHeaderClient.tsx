@@ -115,7 +115,7 @@ export function SiteHeaderClient({
   const mobileNavLinks = [...navLinks, contactLink];
 
   return (
-    <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white shadow-sm">
+    <header className="relative sticky top-0 z-30 border-b border-zinc-200 bg-white shadow-sm">
       <div className="relative mx-auto w-full max-w-7xl">
         <div className="flex items-stretch justify-between gap-2 px-3 py-2 sm:gap-3 sm:px-4">
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
@@ -152,54 +152,54 @@ export function SiteHeaderClient({
             onClick={closeMenu}
           />
         ) : null}
+      </div>
 
-        <nav
-          id={menuId}
-          aria-label="Main navigation"
-          className={`border-t border-zinc-200 bg-[#e8ebf3] ${
-            open
-              ? "absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto shadow-lg"
-              : "hidden md:block"
-          }`}
-        >
-          <div className="mx-auto w-full max-w-7xl">
-            <ul className="flex flex-col gap-1 px-3 py-3 md:hidden">
-              {mobileNavLinks.map((item) => (
-                <li key={item.href}>
+      <nav
+        id={menuId}
+        aria-label="Main navigation"
+        className={`border-t border-zinc-200 bg-[#e8ebf3] ${
+          open
+            ? "absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto shadow-lg"
+            : "hidden md:block"
+        }`}
+      >
+        <div className="mx-auto w-full max-w-7xl">
+          <ul className="flex flex-col gap-1 px-3 py-3 sm:px-4 md:hidden">
+            {mobileNavLinks.map((item) => (
+              <li key={item.href}>
+                <NavLink
+                  item={item}
+                  isActive={activeHref === item.href}
+                  onNavigate={closeMenu}
+                  mobile
+                />
+              </li>
+            ))}
+          </ul>
+
+          <div className="hidden w-full items-center justify-between gap-4 px-3 py-3 sm:px-4 md:flex">
+            <ul className="flex min-w-0 flex-wrap items-center justify-start gap-x-5 gap-y-2 lg:gap-x-6 xl:gap-x-8">
+              {navLinks.map((item) => (
+                <li key={item.href} className="shrink-0">
                   <NavLink
                     item={item}
                     isActive={activeHref === item.href}
-                    onNavigate={closeMenu}
-                    mobile
                   />
                 </li>
               ))}
             </ul>
 
-            <div className="hidden items-center justify-between gap-4 px-4 py-3 md:flex">
-              <ul className="flex min-w-0 flex-wrap items-center justify-start gap-x-5 gap-y-2 lg:gap-x-6 xl:gap-x-8">
-                {navLinks.map((item) => (
-                  <li key={item.href} className="shrink-0">
-                    <NavLink
-                      item={item}
-                      isActive={activeHref === item.href}
-                    />
-                  </li>
-                ))}
-              </ul>
-
-              <ul className="shrink-0">
-                <li>
-                  <NavLink
-                    item={contactLink}
-                    isActive={activeHref === contactLink.href}
-                  />
-                </li>
-              </ul>
-            </div>
+            <ul className="shrink-0">
+              <li>
+                <NavLink
+                  item={contactLink}
+                  isActive={activeHref === contactLink.href}
+                />
+              </li>
+            </ul>
           </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </header>
   );
 }

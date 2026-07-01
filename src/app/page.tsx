@@ -55,7 +55,7 @@ export default async function LandingPage() {
     ]);
 
   return (
-    <div className="min-h-screen bg-white font-sans text-zinc-950">
+    <div className="min-h-screen overflow-x-hidden bg-white font-sans text-zinc-950">
       <JsonLd data={buildHomepageJsonLd(headlineItems)} />
       <SiteHeader activeHref="/" navLinks={navLinks} />
 

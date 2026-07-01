@@ -256,6 +256,28 @@ export async function getPublishedPostById(id: string): Promise<Post | null> {
   return data ? mapPost(data as PostRow) : null;
 }
 
+export async function getRelatedPublishedPosts(
+  city: string,
+  excludeId: string,
+  limit = 5,
+): Promise<Post[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("status", "published")
+    .ilike("city", city)
+    .neq("id", excludeId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(`Failed to fetch related posts: ${error.message}`);
+  }
+
+  return (data as PostRow[]).map(mapPost);
+}
+
 export async function getPostById(id: string): Promise<Post | null> {
   if (!isUuid(id)) {
     return null;

@@ -21,6 +21,7 @@ import { uploadPostImage } from "@/lib/supabase/storage";
 import { createPostSchema, updatePostSchema } from "@/lib/validations/post";
 import { parseHomepageSections } from "@/lib/constants/homepageSections";
 import { getCategoryPathForCity } from "@/lib/news/postNewsItem";
+import { notifyPublishedPost } from "@/lib/push/notifyPublishedPost";
 import { isUuid } from "@/lib/utils/uuid";
 import type { Post } from "@/types";
 
@@ -133,7 +134,11 @@ export async function createPost(
   }
 
   try {
-    await createPostInDb(parsed.data);
+    const post = await createPostInDb(parsed.data);
+
+    if (parsed.data.status === "published") {
+      void notifyPublishedPost(post);
+    }
   } catch (error) {
     return {
       success: false,
@@ -204,19 +209,30 @@ export async function updatePostAction(
   }
 
   let previousCity: string | undefined;
+  let previousStatus: Post["status"] | undefined;
 
   try {
     const existingPost = await getPostById(id);
     previousCity = existingPost?.city;
+    previousStatus = existingPost?.status;
   } catch {
     // Continue with update even if the lookup fails.
   }
 
-  try {
-    const post = await updatePostInDb(id, parsed.data);
+  let updatedPost: Post | null = null;
 
-    if (!post) {
+  try {
+    updatedPost = await updatePostInDb(id, parsed.data);
+
+    if (!updatedPost) {
       return { success: false, message: "Post not found." };
+    }
+
+    if (
+      updatedPost.status === "published" &&
+      previousStatus === "draft"
+    ) {
+      void notifyPublishedPost(updatedPost);
     }
   } catch (error) {
     return {
