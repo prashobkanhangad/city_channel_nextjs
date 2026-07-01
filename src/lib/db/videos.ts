@@ -38,7 +38,6 @@ async function queryActiveVideos(
     .from("videos")
     .select("*")
     .eq("is_active", true)
-    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .limit(limit);
 
@@ -132,7 +131,6 @@ export async function getActiveVideosPaginated(
     .from("videos")
     .select("*", { count: "exact" })
     .eq("is_active", true)
-    .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false })
     .range(from, to);
 

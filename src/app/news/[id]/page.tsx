@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { CategorySidebar } from "@/components/landing/CategorySidebar";
 import { PostFeaturedImage } from "@/components/landing/PostImage";
 import { SiteLayout } from "@/components/landing/SiteLayout";
-import { sections } from "@/lib/mock/newsData";
 import {
   getArticleById,
   getRelatedArticles,
@@ -51,11 +50,9 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
     notFound();
   }
 
-  const related = getRelatedArticles(id);
-  const recent = sections.latest.filter((item) => item.id !== id);
-  const timeLabel = article.publishedAt
-    ? new Date(article.publishedAt).toLocaleString("en-IN")
-    : article.minutesAgo !== undefined
+  const related = await getRelatedArticles(id);
+  const timeLabel =
+    article.minutesAgo !== undefined
       ? formatRelativeTime(article.minutesAgo)
       : "";
 
@@ -142,7 +139,7 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
         </div>
 
         <div className="lg:col-span-4">
-          <CategorySidebar latest={recent} />
+          <CategorySidebar />
         </div>
       </div>
     </SiteLayout>

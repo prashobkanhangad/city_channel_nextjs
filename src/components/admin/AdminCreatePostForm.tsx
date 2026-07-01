@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { createPost, type PostActionState } from "@/actions/posts";
 import { AdminHomepageSectionCheckboxes } from "@/components/admin/AdminHomepageSectionCheckboxes";
 import {
@@ -20,6 +21,30 @@ const initialState: PostActionState = {
   message: "",
   errors: undefined,
 };
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="flex h-10 items-center justify-center gap-2 rounded-lg bg-red-600 px-4 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-80"
+    >
+      {pending ? (
+        <>
+          <span
+            aria-hidden="true"
+            className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+          />
+          Saving...
+        </>
+      ) : (
+        "Save post"
+      )}
+    </button>
+  );
+}
 
 export default function AdminCreatePostForm() {
   const [state, formAction] = useActionState(createPost, initialState);
@@ -116,12 +141,7 @@ export default function AdminCreatePostForm() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          className="h-10 rounded-lg bg-red-600 px-4 text-sm font-medium text-white hover:bg-red-700"
-        >
-          Save post
-        </button>
+        <SubmitButton />
         {state.success ? (
           <p className="text-sm text-green-700">{state.message}</p>
         ) : state.message ? (

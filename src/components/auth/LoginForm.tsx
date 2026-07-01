@@ -1,8 +1,33 @@
 "use client";
 
 import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import { login, type LoginActionState } from "@/actions/auth";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-red-700 text-sm font-semibold text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-80"
+    >
+      {pending ? (
+        <>
+          <span
+            aria-hidden="true"
+            className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
+          />
+          Signing in...
+        </>
+      ) : (
+        "Sign in"
+      )}
+    </button>
+  );
+}
 
 const initialState: LoginActionState = {
   success: false,
@@ -48,12 +73,7 @@ export default function LoginForm() {
         ) : null}
       </label>
 
-      <button
-        type="submit"
-        className="h-11 w-full rounded-lg bg-red-700 text-sm font-semibold text-white hover:bg-red-800"
-      >
-        Sign in
-      </button>
+      <SubmitButton />
 
       {state.message && !state.success ? (
         <p className="text-center text-sm text-red-600">{state.message}</p>
